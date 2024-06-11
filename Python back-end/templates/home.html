@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLASK HTML</title>
+    <style>
+        .paragrafo{
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1> Chamando uma api </h1>
+
+    <input id="nome" value="nome" placeholder="Nome"/>
+    <input id="senha" value="senha" placeholder="Senha"/>
+    <button id="postData"> Enviar dados </button>
+
+    <script>
+        async function logClientes(){
+            const response = await fetch('http://localhost:3000/clientes');
+            const data = await response.json();
+
+            const paragrafos = data.clientes.map(function (cliente) {
+                return (
+                    '<h3 class="paragrafo">' + 
+                        cliente.nome + 
+                        '' + 
+                        cliente.senha + 
+                    '</h3>'
+                );
+            });
+
+            document.body.innerHTML += paragrafos.join('');
+        }
+        logClientes();
+
+        async function postCliente(){
+            let nome = document.getElementById('nome').value;
+            let senha = document.getElementById('senha').value;
+
+            const data = {
+                nome: nome,
+                senha: senha,
+            };
+
+            const response = await fetch('http://localhost:3000/clientes', {
+                method: "POST",
+                body: JSON.stringify(data),
+            });
+            console.log(nome,senha);
+        }
+
+        document
+            .getElementById('postData')
+            .addEventListener('click', postCliente);
+    </script>
+</body>
+</html>
